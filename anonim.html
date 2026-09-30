@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поймай кнопку!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        #counter {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+
+        .kitten-img {
+            width: 250px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        #run-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #ff4757;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            position: absolute;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.4);
+            z-index: 10;
+        }
+
+        #win-message {
+            display: none;
+            font-size: 2.5rem;
+            color: #2ed573;
+            animation: pop 0.3s ease-in-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Попробуй нажать! 😜</h1>
+    <div id="counter">Поймано: <span id="clicks">0</span>/5</div>
+
+    <!-- Картинка с котёнком -->
+    <img src="https://placekitten.com/300/300" alt="Котёнок" class="kitten-img">
+
+    <!-- Убегающая кнопка -->
+    <button id="run-btn">Нажми меня!</button>
+
+    <!-- Сообщение после 5 кликов -->
+    <div id="win-message">Умничка! 🎉</div>
+
+    <script>
+        const btn = document.getElementById('run-btn');
+        const counterText = document.getElementById('clicks');
+        const winMessage = document.getElementById('win-message');
+        let count = 0;
+
+        function moveButton() {
+            // Ограничиваем координаты, чтобы кнопка не вылетала за экран
+            const maxX = window.innerWidth - btn.offsetWidth - 20;
+            const maxY = window.innerHeight - btn.offsetHeight - 20;
+
+            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        // Кнопка убегает при наведении мышки
+        btn.addEventListener('mouseover', moveButton);
+
+        // Для сенсорных экранов (телефонов)
+        btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Когда удалось кликнуть
+        btn.addEventListener('click', () => {
+            count++;
+            counterText.textContent = count;
+
+            if (count >= 5) {
+                btn.style.display = 'none';
+                winMessage.style.display = 'block';
+            } else {
+                moveButton();
+            }
+        });
+
+        // Случайное положение при старте
+        moveButton();
+    </script>
+
+</body>
+</html>
