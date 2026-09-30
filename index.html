@@ -25,16 +25,19 @@
 
         #counter {
             font-size: 1.2rem;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             color: #aaa;
         }
 
+        /* Котёнок изначально скрыт */
         .kitten-img {
-            width: 250px;
+            display: none;
+            width: 280px;
             height: auto;
             border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+            margin-top: 15px;
+            animation: pop 0.4s ease-in-out;
         }
 
         #run-btn {
@@ -47,7 +50,7 @@
             border-radius: 25px;
             cursor: pointer;
             position: absolute;
-            transition: all 0.1s ease;
+            transition: all 0.15s ease;
             box-shadow: 0 4px 10px rgba(255, 71, 87, 0.4);
             z-index: 10;
         }
@@ -56,7 +59,7 @@
             display: none;
             font-size: 2.5rem;
             color: #2ed573;
-            animation: pop 0.3s ease-in-out;
+            animation: pop 0.4s ease-in-out;
         }
 
         @keyframes pop {
@@ -70,23 +73,21 @@
     <h1>Попробуй нажать! 😜</h1>
     <div id="counter">Поймано: <span id="clicks">0</span>/5</div>
 
-    <!-- Картинка с котёнком -->
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOTLGVmhBWz6Xmlyf3u9P798wO7_oYg0BG6PmowXa1wA&s=10"img">
-
     <!-- Убегающая кнопка -->
     <button id="run-btn">Нажми меня!</button>
 
     <!-- Сообщение после 5 кликов -->
     <div id="win-message">Умничка! 🎉</div>
+    <img id="kitten" src="https://i.pinimg.com/736x/0a/c7/7c/0ac77ca554ac326e5cd3d13013900346.jpg" alt="Котёнок" class="kitten-img">
 
     <script>
         const btn = document.getElementById('run-btn');
         const counterText = document.getElementById('clicks');
         const winMessage = document.getElementById('win-message');
+        const kitten = document.getElementById('kitten');
         let count = 0;
 
         function moveButton() {
-            // Ограничиваем координаты, чтобы кнопка не вылетала за экран
             const maxX = window.innerWidth - btn.offsetWidth - 20;
             const maxY = window.innerHeight - btn.offsetHeight - 20;
 
@@ -97,29 +98,23 @@
             btn.style.top = randomY + 'px';
         }
 
-        // Кнопка убегает при наведении мышки
-        btn.addEventListener('mouseover', moveButton);
-
-        // Для сенсорных экранов (телефонов)
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            moveButton();
-        });
-
-        // Когда удалось кликнуть
+        // При клике или касании на телефоне
         btn.addEventListener('click', () => {
             count++;
             counterText.textContent = count;
 
             if (count >= 5) {
+                // Победил! Прячем кнопку и показываем победу и котёнка
                 btn.style.display = 'none';
                 winMessage.style.display = 'block';
+                kitten.style.display = 'block';
             } else {
+                // Перемещаем кнопку на новое место
                 moveButton();
             }
         });
 
-        // Случайное положение при старте
+        // Ставим кнопку в случайное место при старте
         moveButton();
     </script>
 
